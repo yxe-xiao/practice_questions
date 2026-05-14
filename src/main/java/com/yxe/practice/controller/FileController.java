@@ -15,6 +15,8 @@ import java.io.File;
 import java.util.Arrays;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
  *
  */
 @RestController
+@ApiOperation("文件接口")
 @RequestMapping("/file")
 @Slf4j
 public class FileController {
