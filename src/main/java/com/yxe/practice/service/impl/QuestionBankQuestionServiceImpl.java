@@ -9,16 +9,21 @@ import com.yxe.practice.constant.CommonConstant;
 import com.yxe.practice.exception.ThrowUtils;
 import com.yxe.practice.mapper.QuestionBankQuestionMapper;
 import com.yxe.practice.model.dto.questionBankQuestion.QuestionBankQuestionQueryRequest;
+import com.yxe.practice.model.entity.Question;
+import com.yxe.practice.model.entity.QuestionBank;
 import com.yxe.practice.model.entity.QuestionBankQuestion;
 import com.yxe.practice.model.entity.User;
 import com.yxe.practice.model.vo.QuestionBankQuestionVO;
 import com.yxe.practice.model.vo.UserVO;
 import com.yxe.practice.service.QuestionBankQuestionService;
+import com.yxe.practice.service.QuestionBankService;
+import com.yxe.practice.service.QuestionService;
 import com.yxe.practice.service.UserService;
 import com.yxe.practice.utils.SqlUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -39,17 +44,33 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
 
     @Resource
     private UserService userService;
+    @Resource
+    @Lazy
+    private QuestionService questionService;
+    @Resource
+    private QuestionBankService questionBankService;
 
     /**
-     * 校验数据
-     *
+     * 对创建的数据进行校验
      * @param questionBankQuestion
-     * @param add                  对创建的数据进行校验
+     * @param add
      */
     @Override
     public void validQuestionBankQuestion(QuestionBankQuestion questionBankQuestion, boolean add) {
-
+        ThrowUtils.throwIf(questionBankQuestion == null, ErrorCode.PARAMS_ERROR);
+        // 题目和题库必须存在
+        Long questionId = questionBankQuestion.getQuestionId();
+        if (questionId != null) {
+            Question question = questionService.getById(questionId);
+            ThrowUtils.throwIf(question == null, ErrorCode.NOT_FOUND_ERROR, "题目不存在");
+        }
+        Long questionBankId = questionBankQuestion.getQuestionBankId();
+        if (questionBankId != null) {
+            QuestionBank questionBank = questionBankService.getById(questionBankId);
+            ThrowUtils.throwIf(questionBank == null, ErrorCode.NOT_FOUND_ERROR, "题库不存在");
+        }
     }
+
     /**
      * 获取查询条件
      *

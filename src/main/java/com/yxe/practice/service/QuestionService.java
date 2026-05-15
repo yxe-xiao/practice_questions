@@ -3,6 +3,7 @@ package com.yxe.practice.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yxe.practice.common.BaseResponse;
 import com.yxe.practice.model.dto.question.QuestionQueryRequest;
 import com.yxe.practice.model.entity.Question;
 import com.yxe.practice.model.vo.QuestionVO;
@@ -48,4 +49,12 @@ public interface QuestionService extends IService<Question> {
      * @return
      */
     Page<QuestionVO> getQuestionVOPage(Page<Question> questionPage, HttpServletRequest request);
+
+    /**
+     * 获取题目列表
+     *
+     * @param questionQueryRequest
+     * @return
+     */
+     Page<Question> listQuestionByPage(QuestionQueryRequest questionQueryRequest);
 }
